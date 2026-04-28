@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 
 
@@ -14,8 +13,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const params = useSearchParams();
-  const isRegistered = params.get("registered");
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  // Avoid build-time CSR bailout warnings by reading search params on client after mount.
+  // (This is equivalent behavior for showing the "registered" success banner.)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      setIsRegistered(params.get("registered") === "true");
+    }
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
