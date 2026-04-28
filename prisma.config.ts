@@ -14,6 +14,5 @@ export default defineConfig({
     // - DIRECT_URL: direct connection for migrations
     // Prisma Migrate should use a direct connection (not PgBouncer).
     url: process.env["DIRECT_URL"] ?? process.env["DATABASE_URL"],
-    directUrl: process.env["DIRECT_URL"],
   },
 });
