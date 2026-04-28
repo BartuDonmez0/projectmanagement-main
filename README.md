@@ -13,6 +13,42 @@ TaskFlow, küçük ekiplerin Trello benzeri bir akışta **board → sütun → 
 - **Kalıcılık**: Sıralama verisinin DB’de saklanması ve API ile güncellenmesi
 - **Deploy**: Uygulamanın Vercel üzerinde çalışır durumda olması (Supabase Postgres ile)
 
+## Teknik rapor – Tasarım kararları ve analiz
+
+### 1) Sürükle‑bırak (Drag & Drop) kütüphanesi
+
+- **Seçim**: `@dnd-kit`
+- **Gerekçe**:
+  - **Modern & aktif**: Next/React ekosistemiyle uyumlu ve güncel bir API.
+  - **Performans**: Büyük listelerde akıcılık için optimize edilebilir bir yaklaşım.
+  - **Esneklik**: “Aynı sütunda reorder” + “sütunlar arası taşıma” senaryolarını temiz biçimde modelleyebilme.
+- **Trade‑off / risk**:
+  - Mobilde long‑press, auto‑scroll gibi UX detayları projeye göre ek ayar isteyebilir.
+- **Uygulama notu**:
+  - Taşıma sonrası hem **UI state** hem de **DB sıralaması** güncellenerek tutarlılık korunur.
+
+### 2) Sıralama verisi nasıl saklandı?
+
+- **Seçim**: Kartlarda `order: Int` ile deterministik sıralama
+- **Gerekçe**:
+  - **Yenilemede kalıcılık**: Sıralama DB’de tutulduğu için refresh sonrası kaybolmaz.
+  - **Basit ve güvenilir**: 48 saatlik scope’ta hataya dayanıklı, kolay doğrulanabilir bir yöntem.
+- **Trade‑off / alternatifler**:
+  - “Fractional ordering” daha az update ile insert kolaylığı sağlar; ancak ek karmaşıklık getirir.
+  - Çok büyük listelerde tüm `order` değerlerini yeniden yazmak maliyetli olabilir; bu projede kabul edildi.
+- **Uygulama notu**:
+  - Kart taşındığında hedef sütundaki kartların `order` değerleri yeniden hesaplanıp API üzerinden DB’ye yazılır.
+
+### 3) Mobil kullanılabilirlik
+
+- **Yaklaşım**: Responsive UI + dnd-kit’in touch senaryolarına uygunluğu
+- **Not**: Mobile‑first “uzun basma ile sürükleme” gibi ek etkileşimler artırılabilir; timebox nedeniyle çekirdek akış önceliklendirildi.
+
+### 4) 48 saatlik odak ve kapsam yönetimi
+
+- Öncelik: **sorunsuz drag & drop**, **sağlam sıralama kalıcılığı**, **deploy edilebilirlik**.
+- Ertelenenler: sütun reorder, etiket/due date/aktivite geçmişi gibi genişletmeler (mevcut modele doğal şekilde eklenebilir).
+
 ## Özellikler
 
 - **Auth**: Kayıt / giriş (JWT cookie ile oturum)
