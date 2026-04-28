@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { signToken } from "@/lib/auth";
-import { Prisma } from "@/app/generated/prisma";
 
 const registerSchema = z.object({
   name: z.string().min(2, "İsim en az 2 karakter olmalı"),
@@ -63,21 +62,16 @@ export async function POST(req: Request) {
     return response;
   } catch (err) {
     if (err instanceof z.ZodError) {
-      const first = err.issues[0]?.message ?? "Bilgileri kontrol et.";
-      return NextResponse.json({ message: first }, { status: 400 });
+      return NextResponse.json(
+        { message: err.issues[0]?.message ?? "Geçersiz veri" },
+        { status: 400 }
+      );
     }
 
-    // Surface common Prisma errors in a user-friendly way.
-    if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      if (err.code === "P2002") {
-        return NextResponse.json(
-          { message: "Bu email zaten kayıtlı" },
-          { status: 400 }
-        );
-      }
-    }
+    // Prisma errors are typed, but keeping it lightweight:
+    const message =
+      err instanceof Error ? err.message : "Kayıt işlemi başarısız";
 
-    console.error("Register error:", err);
-    return NextResponse.json({ message: "Kayıt işlemi başarısız" }, { status: 400 });
+    return NextResponse.json({ message }, { status: 400 });
   }
 }

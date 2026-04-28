@@ -1,16 +1,7 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
-function requireJwtSecret() {
-  if (!JWT_SECRET) {
-    throw new Error(
-      "JWT_SECRET is missing. Set JWT_SECRET in .env/.env.local before using auth endpoints."
-    );
-  }
-  return JWT_SECRET;
-}
+const JWT_SECRET = process.env.JWT_SECRET!;
 
 export type AuthPayload = {
   userId: string;
@@ -18,7 +9,7 @@ export type AuthPayload = {
 };
 
 export function signToken(payload: AuthPayload) {
-  return jwt.sign(payload, requireJwtSecret(), {
+  return jwt.sign(payload, JWT_SECRET, {
     expiresIn: "7d",
   });
 }
@@ -30,7 +21,7 @@ export async function getCurrentUser() {
   if (!token) return null;
 
   try {
-    return jwt.verify(token, requireJwtSecret()) as AuthPayload;
+    return jwt.verify(token, JWT_SECRET) as AuthPayload;
   } catch {
     return null;
   }

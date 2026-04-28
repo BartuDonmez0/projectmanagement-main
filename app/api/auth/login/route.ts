@@ -59,10 +59,17 @@ export async function POST(req: Request) {
     });
 
     return response;
-  } catch {
-    return NextResponse.json(
-      { message: "Giriş işlemi başarısız" },
-      { status: 400 }
-    );
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        { message: err.issues[0]?.message ?? "Geçersiz veri" },
+        { status: 400 }
+      );
+    }
+
+    const message =
+      err instanceof Error ? err.message : "Giriş işlemi başarısız";
+
+    return NextResponse.json({ message }, { status: 400 });
   }
 }
