@@ -86,12 +86,10 @@ npm run dev
 3. `.env` içindeki `DIRECT_URL` ve `DATABASE_URL` değerlerini doldur.
 4. Migration’ları DB’ye uygula:
 
-````bash
+```bash
 npx prisma migrate deploy
 
-```md
-![Login](docs/screenshots/login.png)
-````
+```
 
 ### Login
 
