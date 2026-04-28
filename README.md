@@ -110,17 +110,29 @@ npx prisma migrate deploy && next build --webpack
 
 ## Ekran görüntüleri / Demo
 
-İstersen ekran görüntülerini `docs/screenshots/` altına ekleyip buradan linkleyebilirsin:
+Ekran görüntüleri `docs/screenshots/` altında tutulur:
 
 - `docs/screenshots/login.png`
 - `docs/screenshots/register.png`
 - `docs/screenshots/board.png`
 
-Örnek kullanım:
+Örnek kullanım (README içinde görüntülenir):
 
 ```md
 ![Login](docs/screenshots/login.png)
 ```
+
+### Login
+
+![login.png](docs/screenshots/login.png)
+
+### Register
+
+![register.png](docs/screenshots/register.png)
+
+### Board
+
+![board.png](docs/screenshots/board.png)
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
