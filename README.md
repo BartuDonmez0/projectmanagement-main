@@ -1,5 +1,7 @@
 # TaskFlow – Project Management (Kanban)
 
+## Canlı Demo
+- **Vercel**: `https://projectmanagement-main-....vercel.app`
 TaskFlow, ekiplerin proje ve görevlerini **Kanban board** üzerinde yönetmesi için geliştirilmiş bir web uygulamasıdır.
 
 ## Özellikler
