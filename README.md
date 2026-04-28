@@ -1,9 +1,17 @@
 # TaskFlow – Project Management (Kanban)
 
 ## Canlı Demo
-[ `https://projectmanagement-main-....vercel.app`](https://projectmanagement-main-5wmpnhqcn-bartus-projects-013bac45.vercel.app)
+- **Vercel**: `https://projectmanagement-main-5wmpnhqcn-bartus-projects-013bac45.vercel.app`
 
-TaskFlow, ekiplerin proje ve görevlerini **Kanban board** üzerinde yönetmesi için geliştirilmiş bir web uygulamasıdır.
+TaskFlow, küçük ekiplerin Trello benzeri bir akışta **board → sütun → kart** yapısı ile görev yönetmesini sağlayan Kanban tabanlı bir web uygulamasıdır. Kartlar **sürükle-bırak** ile sütunlar arasında taşınır; **sıralama** DB’de tutulduğu için sayfa yenilense bile korunur.
+
+## Kapsam ve hedefler (teknik değerlendirme)
+
+- **Auth**: Kullanıcı kayıt/giriş, JWT cookie ile oturum yönetimi
+- **CRUD**: Proje/board, sütun ve kart yönetimi
+- **Drag & drop**: Kartların sütunlar arası taşınması + sıralama güncellemesi
+- **Kalıcılık**: Sıralama verisinin DB’de saklanması ve API ile güncellenmesi
+- **Deploy**: Uygulamanın Vercel üzerinde çalışır durumda olması (Supabase Postgres ile)
 
 ## Özellikler
 
@@ -12,6 +20,15 @@ TaskFlow, ekiplerin proje ve görevlerini **Kanban board** üzerinde yönetmesi 
 - **Kanban board**: Kolonlar & kartlar, sıralama/akış
 - **Görev atama**: Kartlara kullanıcı atama (model seviyesinde)
 - **Alt görevler**: Subtask oluşturma ve takip
+
+## Tasarım kararları (kısa)
+
+- **Drag & drop kütüphanesi**: `@dnd-kit`
+  - **Artılar**: modern, aktif geliştiriliyor, iyi performans, mobil/touch senaryolarında esnek
+  - **Eksiler**: bazı UX detayları (long-press, auto-scroll) projeye göre ayrıca ince ayar isteyebilir
+- **Sıralama stratejisi**: kartlarda `order: Int`
+  - Kart taşındığında hedef sütundaki kartların `order` değerleri tekrar hesaplanıp DB’ye yazılır.
+  - 48 saatlik scope için “her insertte fractional ordering” yerine daha deterministik bir yaklaşım tercih edildi.
 
 ## Teknolojiler
 
@@ -37,6 +54,11 @@ Bu projede DB bağlantısı **`prisma.config.ts`** üzerinden yönetilir:
 
 - `DATABASE_URL`
 - `DIRECT_URL`
+
+### Vercel + Supabase bağlantı notu (IPv4/TLS)
+
+- Supabase Direct DB bağlantıları bazı ortamlarda **IPv6** ve/veya TLS zinciri nedeniyle problem çıkarabilir.
+- Bu projede üretim ortamında stabilite için Supabase **pooler** kullanımı önerilir.
 
 ### Turbopack (Windows + Türkçe karakter) problemi
 
