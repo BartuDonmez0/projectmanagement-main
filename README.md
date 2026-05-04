@@ -57,7 +57,7 @@ TaskFlow, küçük ekiplerin Trello benzeri bir akışta **board → sütun → 
 - **Görev atama**: Kartlara kullanıcı atama (model seviyesinde)
 - **Alt görevler**: Subtask oluşturma ve takip
 
-## Tasarım kararları (kısa)
+## Tasarım kararları 
 
 - **Drag & drop kütüphanesi**: `@dnd-kit`
   - **Artılar**: modern, aktif geliştiriliyor, iyi performans, mobil/touch senaryolarında esnek
